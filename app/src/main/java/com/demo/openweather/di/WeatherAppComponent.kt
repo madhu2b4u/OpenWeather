@@ -2,6 +2,9 @@ package com.demo.openweather.di
 
 import android.app.Application
 import com.demo.openweather.WeatherApp
+import com.demo.openweather.weather.di.WeatherDomainModule
+import com.demo.openweather.weather.di.WeatherPresentationModule
+import com.demo.openweather.weather.di.WeatherRemoteModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -15,6 +18,9 @@ import javax.inject.Singleton
         NetworkModule::class,
         FragmentBuilderModule::class,
         ActivityBuilderModule::class,
+        WeatherDomainModule::class,
+        WeatherPresentationModule::class,
+        WeatherRemoteModule::class,
         AppModule::class
     ]
 )
