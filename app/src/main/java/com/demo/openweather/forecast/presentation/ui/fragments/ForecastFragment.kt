@@ -23,18 +23,17 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_forecast.*
 import javax.inject.Inject
 
-
-
 class ForecastFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-
     private lateinit var mForecastViewModel: ForecastViewModel
 
     @Inject
     lateinit var mapper : WeatherUIMapper
+
+    private var gps : GpsProvider ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,13 +42,15 @@ class ForecastFragment : DaggerFragment() {
         return inflater.inflate(R.layout.fragment_forecast, container, false)
     }
 
-
     override fun onStart() {
         super.onStart()
         lifecycleScope.launchWhenStarted {
             try {
                 mForecastViewModel =
                     ViewModelProviders.of(activity!!, viewModelFactory).get(ForecastViewModel::class.java)
+
+                val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
+                gps = GpsProvider(activity!!,mFusedLocationClient)
 
                 setGps()
                 toolbar.title = getString(R.string.toolbar_forecast_title)
@@ -81,6 +82,7 @@ class ForecastFragment : DaggerFragment() {
         }
     }
 
+
     private fun showLoading() {
         llNoDataLayout.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
@@ -105,10 +107,8 @@ class ForecastFragment : DaggerFragment() {
     }
 
     private fun setGps(){
-        val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
-        val gps = GpsProvider(activity!!,mFusedLocationClient)
-        gps.getLastLocation()
-        gps.locationListener { latitude, longitude ->
+        gps?.getLastLocation()
+        gps?.locationListener { latitude, longitude ->
             mForecastViewModel.fetchForecast(latitude,longitude)
         }
 

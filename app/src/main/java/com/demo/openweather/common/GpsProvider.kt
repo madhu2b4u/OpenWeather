@@ -14,14 +14,15 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
+val PERMISSION_ID = 42
 
 class GpsProvider(private val activity :Activity, private var mFusedLocationClient : FusedLocationProviderClient) {
 
-    val PERMISSION_ID = 42
-    var latitude =""
-    var longitude =""
+    var latitude = ""
+    var longitude = ""
 
     private var function: ((latitude :String, longitude :String) -> Unit)? = null
+
     fun locationListener(function: (latitude :String, longitude :String) -> Unit) {
         this.function = function
     }
@@ -72,7 +73,6 @@ class GpsProvider(private val activity :Activity, private var mFusedLocationClie
             requestPermissions()
         }
     }
-
 
     @SuppressLint("MissingPermission")
     private fun requestNewLocationData() {

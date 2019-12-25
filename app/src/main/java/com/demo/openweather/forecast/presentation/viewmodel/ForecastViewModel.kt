@@ -1,6 +1,7 @@
 package com.demo.openweather.forecast.presentation.viewmodel
 
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.demo.openweather.common.Result
