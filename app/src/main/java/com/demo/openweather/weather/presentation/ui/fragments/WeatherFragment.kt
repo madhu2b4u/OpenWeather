@@ -24,7 +24,9 @@ import com.demo.openweather.weather.presentation.ui.adapter.WeatherRecyclerviewA
 import com.demo.openweather.weather.presentation.viewmodel.WeatherViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_weather.*
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class WeatherFragment : DaggerFragment() {
 
@@ -41,9 +43,9 @@ class WeatherFragment : DaggerFragment() {
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launchWhenStarted {
+    override fun onStart() {
+    super.onStart()
+    lifecycleScope.launchWhenStarted {
             try {
                 mWeatherViewModel =
                     ViewModelProviders.of(activity!!, viewModelFactory)
@@ -135,15 +137,12 @@ class WeatherFragment : DaggerFragment() {
     }
 
     private fun fetchTemperature(city: String, dialog: DialogInterface?) {
-        val citiesList = city.split(",").toTypedArray()
-        val list = arrayListOf<String>()
-        list.addAll(city.split(",").toTypedArray())
-        if (citiesList.size in 3..7) {
-            citiesList.forEach {
+        val cityList: List<String> = city.split(",").map { it.trim() }
+        if (cityList.size in 3..7) {
+            cityList.forEach {
                 mWeatherViewModel.fetchWeather(it)
             }
             dialog?.dismiss()
-            list.clear()
         } else {
             Toast.makeText(context, getString(R.string.add_cities_error), Toast.LENGTH_SHORT)
                 .show();
