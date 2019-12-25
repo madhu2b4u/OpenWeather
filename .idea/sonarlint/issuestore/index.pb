@@ -155,9 +155,3 @@ w
 Gapp/src/test/java/com/demo/openweather/weather/WeatherRepositoryTest.kt,1/2/12de9e40324cf8ad4c098d0d6be09c50694b921d
 }
 Mapp/src/test/java/com/demo/openweather/weather/WeatherRemoteDataSourceTest.kt,3/0/30142866156c713c14d94e5dfbee10e7ed1c986e
-v
-Fapp/src/test/java/com/demo/openweather/weather/WeatherViewModelTest.kt,b/a/ba33e005e0c4796183e25f8d8dbd72c2115c5876
-[
-+app/src/main/res/layout/dialog_new_city.xml,9/8/98ec5f64ee60bd14dad0d3ab12bab4431e685c29
-V
-&app/src/main/res/menu/weather_menu.xml,e/b/eb90d27df03f53936a20b23ad33ad1e45d4b11e3

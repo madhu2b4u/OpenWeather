@@ -119,6 +119,8 @@ class WeatherFragment : DaggerFragment() {
 
 
     private fun showCreateCategoryDialog() {
+        lstOfWeatherResponse?.clear()
+        weatherRecyclerviewAdapter?.notifyDataSetChanged()
         val builder = context?.let { AlertDialog.Builder(it) }
         val view = layoutInflater.inflate(R.layout.dialog_new_city, null)
         val cityEditText = view.findViewById(R.id.etCities) as EditText
