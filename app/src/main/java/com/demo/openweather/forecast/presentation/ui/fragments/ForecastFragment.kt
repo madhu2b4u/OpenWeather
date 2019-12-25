@@ -1,4 +1,4 @@
-package com.demo.openweather.weather.presentation.ui.fragments
+package com.demo.openweather.forecast.presentation.ui.fragments
 
 
 import android.os.Bundle
@@ -11,29 +11,32 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.demo.openweather.R
+import com.demo.openweather.common.GpsProvider
 import com.demo.openweather.common.Status
 import com.demo.openweather.common.ViewModelFactory
-import com.demo.openweather.weather.data.model.WeatherResponse
-import com.demo.openweather.weather.presentation.ui.adapter.WeatherRecyclerviewAdapter
-import com.demo.openweather.weather.presentation.viewmodel.WeatherViewModel
+import com.demo.openweather.forecast.data.model.ForecastResponse
+import com.demo.openweather.forecast.presentation.ui.adapter.ForecastRecyclerviewAdapter
+import com.demo.openweather.forecast.presentation.viewmodel.ForecastViewModel
+import com.google.android.gms.location.LocationServices
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_weather.*
+import kotlinx.android.synthetic.main.fragment_forecast.*
 import javax.inject.Inject
 
 
-class WeatherFragment : DaggerFragment() {
+class ForecastFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private lateinit var mWeatherViewModel: WeatherViewModel
-    private var lstOfWeatherResponse : ArrayList<WeatherResponse>? = ArrayList()
+
+
+    private lateinit var mForecastViewModel: ForecastViewModel
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_weather, container, false)
+        return inflater.inflate(R.layout.fragment_forecast, container, false)
     }
 
 
@@ -41,15 +44,17 @@ class WeatherFragment : DaggerFragment() {
         super.onStart()
         lifecycleScope.launchWhenStarted {
             try {
-                mWeatherViewModel =
-                    ViewModelProviders.of(activity!!, viewModelFactory)
-                        .get(WeatherViewModel::class.java)
+                mForecastViewModel =
+                    ViewModelProviders.of(activity!!, viewModelFactory).get(ForecastViewModel::class.java)
+                val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
 
-                listOfCities().forEach {
-                    mWeatherViewModel.fetchWeather(it)
+                val gps = GpsProvider(activity!!,mFusedLocationClient)
+                gps.getLastLocation()
+                gps.locationListener { latitude, longitude ->
+                    mForecastViewModel.fetchForecast(latitude,longitude)
                 }
 
-                mWeatherViewModel.weatherResult.observe(this@WeatherFragment, Observer {
+                mForecastViewModel.forecastResult.observe(this@ForecastFragment, Observer {
                     when (it.status) {
                         Status.LOADING -> showLoading()
                         Status.ERROR -> hideLoading()
@@ -73,28 +78,25 @@ class WeatherFragment : DaggerFragment() {
         }
     }
 
-    private fun setResponseToView(response: WeatherResponse) {
-        lstOfWeatherResponse?.add(response)
-        rvWeather.layoutManager = LinearLayoutManager(activity)
-        val adapter = WeatherRecyclerviewAdapter()
-        lstOfWeatherResponse?.let { adapter.populateWeather(it) }
-        rvWeather.adapter = adapter
-    }
 
     private fun showLoading() {
         llNoDataLayout.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
-        rvWeather.visibility = View.GONE
+        rvForecast.visibility = View.GONE
     }
 
     private fun hideLoading() {
         llNoDataLayout.visibility = View.GONE
         progressBar.visibility = View.GONE
-        rvWeather.visibility = View.VISIBLE
+        rvForecast.visibility = View.VISIBLE
     }
 
-
-    private fun listOfCities() = arrayListOf<String>("Hyderabad", "Delhi","Chennai","London","Auckland")
+    private fun setResponseToView(response: ForecastResponse) {
+        rvForecast.layoutManager = LinearLayoutManager(activity)
+        val adapter = ForecastRecyclerviewAdapter()
+        response.list.let { adapter.populateWeather(it) }
+        rvForecast.adapter = adapter
+    }
 
 
 }

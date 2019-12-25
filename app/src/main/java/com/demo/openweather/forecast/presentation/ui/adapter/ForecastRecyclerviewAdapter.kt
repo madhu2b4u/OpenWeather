@@ -1,20 +1,23 @@
-package com.demo.openweather.weather.presentation.ui.adapter
+package com.demo.openweather.forecast.presentation.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.demo.openweather.R
-import com.demo.openweather.weather.data.model.WeatherResponse
-import kotlinx.android.synthetic.main.weather_recycler_item.view.*
+import com.demo.openweather.forecast.data.model.Forecast
+import kotlinx.android.synthetic.main.forecast_recycler_item.view.*
 import java.math.RoundingMode
 import javax.inject.Inject
+import java.text.SimpleDateFormat
 
-class WeatherRecyclerviewAdapter @Inject constructor() : RecyclerView.Adapter<WeatherRecyclerviewAdapter.ArticleViewHolder>() {
 
-    private val lstOfWeatherResponse: MutableList<WeatherResponse> = ArrayList()
+class ForecastRecyclerviewAdapter @Inject constructor() : RecyclerView.Adapter<ForecastRecyclerviewAdapter.ArticleViewHolder>() {
 
-    fun populateWeather(articlesList: List<WeatherResponse>) {
+    private val lstOfWeatherResponse: MutableList<Forecast> = ArrayList()
+
+    fun populateWeather(articlesList: List<Forecast>) {
         lstOfWeatherResponse.clear()
         lstOfWeatherResponse.addAll(articlesList)
         notifyDataSetChanged()
@@ -23,7 +26,7 @@ class WeatherRecyclerviewAdapter @Inject constructor() : RecyclerView.Adapter<We
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return ArticleViewHolder(
-            inflater.inflate(R.layout.weather_recycler_item, parent, false)
+            inflater.inflate(R.layout.forecast_recycler_item, parent, false)
         )
     }
 
@@ -33,9 +36,8 @@ class WeatherRecyclerviewAdapter @Inject constructor() : RecyclerView.Adapter<We
 
     inner class ArticleViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(weatherResponse : WeatherResponse) {
+        fun bind(weatherResponse : Forecast) {
             with(itemView) {
-                    val city = weatherResponse.name+", "+ weatherResponse.sys.country
                     val desc = weatherResponse.weather[0].description
                     val icon = weatherResponse.weather[0].icon
                     val main = weatherResponse.weather[0].main
@@ -45,7 +47,6 @@ class WeatherRecyclerviewAdapter @Inject constructor() : RecyclerView.Adapter<We
                     val actualTemp = convertKelvinToCelsius(weatherResponse.main.temp)
 
                     image.setImageURI(fetchImage(icon))
-                    tvCity.text = city
                     tvMain.text = main
                     tvDescription.text = desc
                     tvWindSpeed.text = windSpeed

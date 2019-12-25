@@ -2,6 +2,9 @@ package com.demo.openweather.di
 
 import android.app.Application
 import com.demo.openweather.WeatherApp
+import com.demo.openweather.forecast.di.ForecastDomainModule
+import com.demo.openweather.forecast.di.ForecastPresentationModule
+import com.demo.openweather.forecast.di.ForecastRemoteModule
 import com.demo.openweather.weather.di.WeatherDomainModule
 import com.demo.openweather.weather.di.WeatherPresentationModule
 import com.demo.openweather.weather.di.WeatherRemoteModule
@@ -21,7 +24,9 @@ import javax.inject.Singleton
         WeatherDomainModule::class,
         WeatherPresentationModule::class,
         WeatherRemoteModule::class,
-        AppModule::class
+        AppModule::class,
+        ForecastDomainModule::class,
+        ForecastPresentationModule::class,ForecastRemoteModule::class
     ]
 )
 interface WeatherAppComponent : AndroidInjector<WeatherApp> {

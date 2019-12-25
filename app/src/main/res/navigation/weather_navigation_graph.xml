@@ -6,9 +6,9 @@
             app:startDestination="@id/weatherFragment">
 
     <fragment android:id="@+id/weatherFragment"
-              android:name="com.demo.openweather.weather.presentation.ui.fragments.WeatherFragment"
+              android:name="com.demo.openweather.forecast.presentation.ui.fragments.ForecastFragment"
               android:label="fragment_articles"
-              tools:layout="@layout/fragment_weather">
+              tools:layout="@layout/fragment_forecast">
 
     </fragment>
 

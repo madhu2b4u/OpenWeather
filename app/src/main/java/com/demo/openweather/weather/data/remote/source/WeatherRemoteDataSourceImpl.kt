@@ -12,7 +12,7 @@ class WeatherRemoteDataSourceImpl @Inject constructor(
     @IO private val context: CoroutineContext) : WeatherRemoteDataSource {
 
     override suspend fun getCityTemperature(city :String) = withContext(context) {
-        val response = service.getCityTemperature(city,BuildConfig.API_KEY).await()
+        val response = service.getCityTemperatureAsync(city,BuildConfig.API_KEY).await()
 
         if (response.isSuccessful)
             response.body() ?: throw Exception("no city")
