@@ -6,9 +6,24 @@
             app:startDestination="@id/weatherFragment">
 
     <fragment android:id="@+id/weatherFragment"
-              android:name="com.demo.openweather.forecast.presentation.ui.fragments.ForecastFragment"
-              android:label="fragment_articles"
-              tools:layout="@layout/fragment_forecast">
+              android:name="com.demo.openweather.weather.presentation.ui.fragments.WeatherFragment"
+              android:label="fragment_weather"
+              tools:layout="@layout/fragment_weather">
+
+        <action
+            android:id="@+id/action_navigate_forecast"
+            app:destination="@id/forecastFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@anim/fade_out"/>
+
+    </fragment>
+
+    <fragment android:id="@+id/forecastFragment"
+        android:name="com.demo.openweather.forecast.presentation.ui.fragments.ForecastFragment"
+        android:label="fragment_forecast"
+        tools:layout="@layout/fragment_forecast">
 
     </fragment>
 

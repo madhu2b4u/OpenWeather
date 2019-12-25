@@ -21,7 +21,12 @@
           android:layout_width="match_parent"
           android:layout_height="?attr/actionBarSize"
           android:background="@color/colorPrimary"
-          app:layout_collapseMode="pin"/>
+          app:layout_collapseMode="pin">
+
+
+
+
+      </androidx.appcompat.widget.Toolbar>
 
       <RelativeLayout
           android:layout_width="match_parent"
@@ -34,7 +39,7 @@
               android:id="@+id/rvWeather"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:visibility="visible"/>
+              android:visibility="gone"/>
 
 
           <LinearLayout
@@ -43,7 +48,7 @@
               android:layout_height="match_parent"
               android:gravity="center"
               android:orientation="vertical"
-              android:visibility="gone">
+              android:visibility="visible">
 
 
               <ImageView
