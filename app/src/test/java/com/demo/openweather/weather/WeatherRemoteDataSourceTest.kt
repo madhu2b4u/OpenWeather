@@ -29,9 +29,7 @@ class WeatherRemoteDataSourceTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-
     lateinit var weatherRemoteDataSource: WeatherRemoteDataSource
-
 
     lateinit var weatherService: WeatherService
 
@@ -67,7 +65,7 @@ class WeatherRemoteDataSourceTest {
     }
 
     @Test
-    fun testGetArticle() = runBlocking {
+    fun testGetWeather() = runBlocking {
 
         weatherService = mock {
             onBlocking { getCityTemperatureAsync(cityName, BuildConfig.API_KEY) } doReturn GlobalScope.async {
@@ -89,7 +87,7 @@ class WeatherRemoteDataSourceTest {
     }
 
     @Test(expected = Exception::class)
-    fun testThrowArticleException() = runBlocking {
+    fun testThrowWeatherException() = runBlocking {
 
         weatherService = mock {
             onBlocking { getCityTemperatureAsync(cityName, BuildConfig.API_KEY) } doReturn GlobalScope.async {

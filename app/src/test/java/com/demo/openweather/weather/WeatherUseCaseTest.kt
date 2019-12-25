@@ -94,7 +94,7 @@ class WeatherUseCaseTest {
     }
 
     @Test
-    fun testErrorData()=mainCoroutineRule.runBlockingTest{
+    fun testWeatherErrorData()=mainCoroutineRule.runBlockingTest{
         articleRepository = mock {
             onBlocking { getCityTemperature(cityName) } doReturn object : LiveData<Result<WeatherResponse>>() {
                 init {

@@ -11,7 +11,15 @@ import com.demo.openweather.forecast.data.model.Forecast
 import com.demo.openweather.forecast.data.model.ItemType
 import com.demo.openweather.forecast.data.model.ListItem
 import kotlinx.android.synthetic.main.forecast_recycler_item.view.*
+import kotlinx.android.synthetic.main.forecast_recycler_item.view.image
+import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvDescription
+import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvMain
+import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvMax
+import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvMin
+import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvTemperature
+import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvWindSpeed
 import kotlinx.android.synthetic.main.row_date.view.*
+import kotlinx.android.synthetic.main.weather_recycler_item.view.*
 import java.math.RoundingMode
 import javax.inject.Inject
 
@@ -72,7 +80,7 @@ class ForecastRecyclerAdapter @Inject constructor() : RecyclerView.Adapter<Forca
                     val desc = weatherResponse.weather[0].description
                     val icon = weatherResponse.weather[0].icon
                     val main = weatherResponse.weather[0].main
-                    val windSpeed = weatherResponse.wind.speed.toString() + " MPH"
+                    val windSpeed = context.getString(R.string.wind_speed ,weatherResponse.wind.speed.toString())
                     val minTemp = convertKelvinToCelsius(weatherResponse.main.temp_min)
                     val maxTemp = convertKelvinToCelsius(weatherResponse.main.temp_max)
                     val actualTemp = convertKelvinToCelsius(weatherResponse.main.temp)
@@ -83,8 +91,8 @@ class ForecastRecyclerAdapter @Inject constructor() : RecyclerView.Adapter<Forca
                     tvDescription.text = desc
                     tvTime.text =time
                     tvWindSpeed.text = windSpeed
-                    tvMin.text = "Min : $minTemp"
-                    tvMax.text = "Max : $maxTemp"
+                    tvMin.text = context.getString(R.string.min_max_temperature ,minTemp)
+                    tvMax.text = context.getString(R.string.min_max_temperature, maxTemp)
                     tvTemperature.text = actualTemp
 
             }

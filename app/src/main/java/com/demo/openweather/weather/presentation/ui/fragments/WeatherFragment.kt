@@ -3,6 +3,7 @@ package com.demo.openweather.weather.presentation.ui.fragments
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,9 @@ import com.demo.openweather.weather.presentation.viewmodel.WeatherViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_weather.*
 import okhttp3.internal.wait
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class WeatherFragment : DaggerFragment() {
 
@@ -33,8 +36,7 @@ class WeatherFragment : DaggerFragment() {
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var mWeatherViewModel: WeatherViewModel
     private var lstOfWeatherResponse : ArrayList<WeatherResponse>? = ArrayList()
-    private var citiesList : List<String> = ArrayList()
-
+    private var weatherRecyclerviewAdapter : WeatherRecyclerviewAdapter? =null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,6 +67,10 @@ class WeatherFragment : DaggerFragment() {
                     }
                 })
 
+                llNoDataLayout.setOnClickListener{
+                    showCreateCategoryDialog()
+                }
+
             } finally {
                 // This line might execute after Lifecycle is DESTROYED.
                 if (lifecycle.currentState >= Lifecycle.State.STARTED) {
@@ -77,7 +83,7 @@ class WeatherFragment : DaggerFragment() {
     }
 
     private fun setToolbarViews() {
-        toolbar.title = "Weather"
+        toolbar.title = getString(R.string.toolbar_weather_title)
         toolbar.inflateMenu(weather_menu)
         toolbar.setOnMenuItemClickListener { item ->
             val id = item.itemId
@@ -92,12 +98,11 @@ class WeatherFragment : DaggerFragment() {
     }
 
     private fun setResponseToView(response: WeatherResponse) {
-        if (lstOfWeatherResponse?.size != listOfCities().size)
-            lstOfWeatherResponse?.add(response)
+        lstOfWeatherResponse?.add(response)
         rvWeather.layoutManager = LinearLayoutManager(activity)
-        val adapter = WeatherRecyclerviewAdapter()
-        lstOfWeatherResponse?.let { adapter.populateWeather(it) }
-        rvWeather.adapter = adapter
+        weatherRecyclerviewAdapter = WeatherRecyclerviewAdapter()
+        rvWeather.adapter = weatherRecyclerviewAdapter
+        lstOfWeatherResponse?.let { weatherRecyclerviewAdapter?.populateWeather(it) }
     }
 
     private fun showLoading() {
@@ -120,21 +125,9 @@ class WeatherFragment : DaggerFragment() {
         builder?.setView(view)
         builder?.setCancelable(false)
 
-
         builder?.setPositiveButton(android.R.string.ok) {dialog: DialogInterface?, which: Int ->
-            val city = cityEditText.text
-            lstOfWeatherResponse?.clear()
-            citiesList = city.split(",").map { it.trim() }
-            if (citiesList.size in 3..7){
-                citiesList.forEach {
-                    mWeatherViewModel.fetchWeather(it)
-                    dialog?.dismiss()
-                }
-            }else {
-                Toast.makeText(context, "Add minimum 3 cities and maximum 7 cities", Toast.LENGTH_SHORT).show();
-                showCreateCategoryDialog()
-            }
-
+            val city = cityEditText.text.toString()
+            fetchTemperature(city, dialog)
         }
 
         builder?.setNegativeButton(android.R.string.cancel) { dialog, p1 ->
@@ -143,9 +136,21 @@ class WeatherFragment : DaggerFragment() {
         builder?.show()
     }
 
-
-
-    private fun listOfCities() = arrayListOf<String>("Hyderabad", "Delhi","Chennai","London","Auckland")
+    private fun fetchTemperature(city: String, dialog: DialogInterface?) {
+        lstOfWeatherResponse?.clear()
+        weatherRecyclerviewAdapter?.notifyDataSetChanged()
+        val citiesList = city.split(",").toTypedArray()
+        if (citiesList.size in 3..7) {
+            citiesList.forEach {
+                mWeatherViewModel.fetchWeather(it)
+                dialog?.dismiss()
+            }
+        } else {
+            Toast.makeText(context, getString(R.string.add_cities_error), Toast.LENGTH_SHORT)
+                .show();
+            showCreateCategoryDialog()
+        }
+    }
 
 
 }

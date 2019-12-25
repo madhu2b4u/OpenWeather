@@ -33,9 +33,6 @@ class WeatherRepositoryTest {
     lateinit var repository: WeatherRepository
 
     @Mock
-    lateinit var localDataSource: WeatherRemoteDataSource
-
-    @Mock
     lateinit var remoteDataSource: WeatherRemoteDataSource
 
     lateinit var weatherService: WeatherService
@@ -67,9 +64,8 @@ class WeatherRepositoryTest {
     }
 
     @Test
-    fun testGetArticlesFromAPI() = mainCoroutineRule.runBlockingTest {
+    fun testGetWeatherFromAPI() = mainCoroutineRule.runBlockingTest {
 
-        Mockito.`when`(localDataSource.getCityTemperature(cityName)).thenReturn(null)
         Mockito.`when`(remoteDataSource.getCityTemperature(cityName)).thenReturn(weatherResponse)
 
 
@@ -86,9 +82,8 @@ class WeatherRepositoryTest {
 
 
     @Test(expected = Exception::class)
-    fun testGetArticlesThrowException() = mainCoroutineRule.runBlockingTest {
+    fun testGetWeatherThrowException() = mainCoroutineRule.runBlockingTest {
 
-        Mockito.`when`(localDataSource.getCityTemperature(cityName)).thenReturn(null)
         Mockito.doThrow(Exception("error")).`when`(remoteDataSource.getCityTemperature(cityName))
 
         repository.getCityTemperature(cityName)

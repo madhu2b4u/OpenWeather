@@ -52,7 +52,7 @@ class ForecastFragment : DaggerFragment() {
                     ViewModelProviders.of(activity!!, viewModelFactory).get(ForecastViewModel::class.java)
 
                 setGps()
-                toolbar.title ="Forecast"
+                toolbar.title = getString(R.string.toolbar_forecast_title)
 
                 swipeRefresh.setOnRefreshListener {
                     setGps()

@@ -53,7 +53,7 @@ class WeatherViewModelTest{
     }
 
     @Test
-    fun testTopUpRequest() = mainCoroutineRule.runBlockingTest {
+    fun testWeatherRequest() = mainCoroutineRule.runBlockingTest {
 
         useCase = mock {
             onBlocking { getTemperature(cityName) } doReturn object : LiveData<Result<WeatherResponse>>() {
@@ -77,7 +77,7 @@ class WeatherViewModelTest{
 
 
     @Test
-    fun testTopUpSuccessData() = mainCoroutineRule.runBlockingTest {
+    fun testWeatherSuccessData() = mainCoroutineRule.runBlockingTest {
 
         useCase = mock {
             onBlocking { getTemperature(cityName) } doReturn object : LiveData<Result<WeatherResponse>>() {
@@ -106,7 +106,7 @@ class WeatherViewModelTest{
 
 
     @Test
-    fun testTopUpFundErrorData() = mainCoroutineRule.runBlockingTest {
+    fun testWeatherFundErrorData() = mainCoroutineRule.runBlockingTest {
 
         useCase = mock {
             onBlocking {getTemperature(cityName)} doReturn object : LiveData<Result<WeatherResponse>>() {

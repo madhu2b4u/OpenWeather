@@ -39,7 +39,7 @@ class WeatherRecyclerviewAdapter @Inject constructor() : RecyclerView.Adapter<We
                     val desc = weatherResponse.weather[0].description
                     val icon = weatherResponse.weather[0].icon
                     val main = weatherResponse.weather[0].main
-                    val windSpeed = weatherResponse.wind.speed.toString() + " MPH"
+                    val windSpeed = context.getString(R.string.wind_speed ,weatherResponse.wind.speed.toString())
                     val minTemp = convertKelvinToCelsius(weatherResponse.main.temp_min)
                     val maxTemp = convertKelvinToCelsius(weatherResponse.main.temp_max)
                     val actualTemp = convertKelvinToCelsius(weatherResponse.main.temp)
@@ -49,8 +49,8 @@ class WeatherRecyclerviewAdapter @Inject constructor() : RecyclerView.Adapter<We
                     tvMain.text = main
                     tvDescription.text = desc
                     tvWindSpeed.text = windSpeed
-                    tvMin.text = "Min : $minTemp"
-                    tvMax.text = "Max : $maxTemp"
+                    tvMin.text = context.getString(R.string.min_max_temperature ,minTemp)
+                    tvMax.text = context.getString(R.string.min_max_temperature, maxTemp)
                     tvTemperature.text = actualTemp
 
             }

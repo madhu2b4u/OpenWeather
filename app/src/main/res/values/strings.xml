@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">OpenWeather</string>
+    <string name="add_cities_error">"Add minimum 3 cities and maximum 7 cities"</string>
+    <string name="toolbar_weather_title">Weather</string>
+    <string name="wind_speed">%s MPH</string>
+    <string name="min_max_temperature">Min %s</string>
+    <string name="no_cities_added">No cities added</string>
+    <string name="no_data_available">No data available</string>
+    <string name="toolbar_forecast_title">Forecast</string>
 </resources>

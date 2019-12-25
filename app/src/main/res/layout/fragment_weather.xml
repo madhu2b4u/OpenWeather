@@ -52,17 +52,18 @@
 
 
               <ImageView
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:src="@drawable/ic_no_data"/>
+                  android:layout_width="32dp"
+                  android:layout_height="32dp"
+                  android:tint="@color/black"
+                  android:src="@drawable/ic_add"/>
 
               <TextView
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:ellipsize="end"
-                  android:fontFamily="monospace"
-                  android:text="No cities added"
-                  android:textSize="13sp" />
+                  android:layout_marginTop="5dp"
+                  android:text="@string/no_cities_added"
+                  android:textSize="15sp" />
 
           </LinearLayout>
 

@@ -82,8 +82,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
-                            android:fontFamily="monospace"
-                            android:text="No cities added"
+                            android:text="@string/no_data_available"
                             android:textSize="13sp" />
 
                     </LinearLayout>
