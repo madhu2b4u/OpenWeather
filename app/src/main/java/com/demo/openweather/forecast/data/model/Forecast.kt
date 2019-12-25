@@ -9,4 +9,6 @@ data class Forecast(
     val sys: Sys,
     val weather: List<Weather>,
     val wind: Wind
-)
+):ListItem() {
+    override fun getType() = ItemType.TYPE_GENERAL
+}

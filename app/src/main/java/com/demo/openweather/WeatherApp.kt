@@ -7,7 +7,6 @@ import dagger.android.DaggerApplication
 class WeatherApp : DaggerApplication() {
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
         return DaggerWeatherAppComponent.builder().application(this).build()
-
     }
 
     override fun onCreate() {

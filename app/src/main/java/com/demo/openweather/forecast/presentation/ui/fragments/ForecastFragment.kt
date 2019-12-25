@@ -14,13 +14,15 @@ import com.demo.openweather.R
 import com.demo.openweather.common.GpsProvider
 import com.demo.openweather.common.Status
 import com.demo.openweather.common.ViewModelFactory
+import com.demo.openweather.forecast.data.mappers.WeatherUIMapper
 import com.demo.openweather.forecast.data.model.ForecastResponse
-import com.demo.openweather.forecast.presentation.ui.adapter.ForecastRecyclerviewAdapter
+import com.demo.openweather.forecast.presentation.ui.adapter.ForecastRecyclerAdapter
 import com.demo.openweather.forecast.presentation.viewmodel.ForecastViewModel
 import com.google.android.gms.location.LocationServices
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_forecast.*
 import javax.inject.Inject
+
 
 
 class ForecastFragment : DaggerFragment() {
@@ -31,6 +33,8 @@ class ForecastFragment : DaggerFragment() {
 
     private lateinit var mForecastViewModel: ForecastViewModel
 
+    @Inject
+    lateinit var mapper : WeatherUIMapper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,14 +50,13 @@ class ForecastFragment : DaggerFragment() {
             try {
                 mForecastViewModel =
                     ViewModelProviders.of(activity!!, viewModelFactory).get(ForecastViewModel::class.java)
-                val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
 
-                val gps = GpsProvider(activity!!,mFusedLocationClient)
-                gps.getLastLocation()
-                gps.locationListener { latitude, longitude ->
-                    mForecastViewModel.fetchForecast(latitude,longitude)
+                setGps()
+                toolbar.title ="Forecast"
+
+                swipeRefresh.setOnRefreshListener {
+                    setGps()
                 }
-
                 mForecastViewModel.forecastResult.observe(this@ForecastFragment, Observer {
                     when (it.status) {
                         Status.LOADING -> showLoading()
@@ -78,7 +81,6 @@ class ForecastFragment : DaggerFragment() {
         }
     }
 
-
     private fun showLoading() {
         llNoDataLayout.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
@@ -89,14 +91,30 @@ class ForecastFragment : DaggerFragment() {
         llNoDataLayout.visibility = View.GONE
         progressBar.visibility = View.GONE
         rvForecast.visibility = View.VISIBLE
+        if (swipeRefresh.isRefreshing)
+            swipeRefresh.isRefreshing = false
     }
 
     private fun setResponseToView(response: ForecastResponse) {
+        tvCity.text = response.city.name +", "+ response.city.country
         rvForecast.layoutManager = LinearLayoutManager(activity)
-        val adapter = ForecastRecyclerviewAdapter()
-        response.list.let { adapter.populateWeather(it) }
+        val adapter = ForecastRecyclerAdapter()
         rvForecast.adapter = adapter
+        adapter.setForecast(mapper.mapToPresentation(response.list))
+
     }
+
+    private fun setGps(){
+        val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
+        val gps = GpsProvider(activity!!,mFusedLocationClient)
+        gps.getLastLocation()
+        gps.locationListener { latitude, longitude ->
+            mForecastViewModel.fetchForecast(latitude,longitude)
+        }
+
+    }
+
+
 
 
 }
