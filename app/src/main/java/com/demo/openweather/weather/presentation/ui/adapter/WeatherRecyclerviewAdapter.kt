@@ -64,7 +64,9 @@ class WeatherRecyclerviewAdapter @Inject constructor() : RecyclerView.Adapter<We
         private fun convertKelvinToCelsius(kevinValue :Double): String {
             return (kevinValue - 273.15).toBigDecimal().setScale(1, RoundingMode.UP).toDouble().toString()+ "°C"
         }
+
     }
+
 
 
 

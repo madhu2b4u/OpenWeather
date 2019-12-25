@@ -3,7 +3,6 @@ package com.demo.openweather.weather.presentation.ui.fragments
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,10 +24,7 @@ import com.demo.openweather.weather.presentation.ui.adapter.WeatherRecyclerviewA
 import com.demo.openweather.weather.presentation.viewmodel.WeatherViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_weather.*
-import okhttp3.internal.wait
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 class WeatherFragment : DaggerFragment() {
 
@@ -52,9 +48,9 @@ class WeatherFragment : DaggerFragment() {
                 mWeatherViewModel =
                     ViewModelProviders.of(activity!!, viewModelFactory)
                         .get(WeatherViewModel::class.java)
-                setToolbarViews()
 
-                mWeatherViewModel.weatherResult.observe(this@WeatherFragment, Observer {
+                setToolbarViews()
+                mWeatherViewModel.weatherResult.observe(viewLifecycleOwner, Observer {
                     when (it.status) {
                         Status.LOADING -> showLoading()
                         Status.ERROR -> hideLoading()
@@ -103,6 +99,8 @@ class WeatherFragment : DaggerFragment() {
         weatherRecyclerviewAdapter = WeatherRecyclerviewAdapter()
         rvWeather.adapter = weatherRecyclerviewAdapter
         lstOfWeatherResponse?.let { weatherRecyclerviewAdapter?.populateWeather(it) }
+        weatherRecyclerviewAdapter?.notifyDataSetChanged()
+
     }
 
     private fun showLoading() {
@@ -137,20 +135,20 @@ class WeatherFragment : DaggerFragment() {
     }
 
     private fun fetchTemperature(city: String, dialog: DialogInterface?) {
-        lstOfWeatherResponse?.clear()
-        weatherRecyclerviewAdapter?.notifyDataSetChanged()
         val citiesList = city.split(",").toTypedArray()
+        val list = arrayListOf<String>()
+        list.addAll(city.split(",").toTypedArray())
         if (citiesList.size in 3..7) {
             citiesList.forEach {
                 mWeatherViewModel.fetchWeather(it)
-                dialog?.dismiss()
             }
+            dialog?.dismiss()
+            list.clear()
         } else {
             Toast.makeText(context, getString(R.string.add_cities_error), Toast.LENGTH_SHORT)
                 .show();
             showCreateCategoryDialog()
         }
     }
-
 
 }

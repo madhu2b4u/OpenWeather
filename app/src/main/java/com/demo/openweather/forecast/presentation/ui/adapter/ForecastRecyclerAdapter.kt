@@ -11,16 +11,10 @@ import com.demo.openweather.forecast.data.model.Forecast
 import com.demo.openweather.forecast.data.model.ItemType
 import com.demo.openweather.forecast.data.model.ListItem
 import kotlinx.android.synthetic.main.forecast_recycler_item.view.*
-import kotlinx.android.synthetic.main.forecast_recycler_item.view.image
-import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvDescription
-import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvMain
-import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvMax
-import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvMin
-import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvTemperature
-import kotlinx.android.synthetic.main.forecast_recycler_item.view.tvWindSpeed
 import kotlinx.android.synthetic.main.row_date.view.*
-import kotlinx.android.synthetic.main.weather_recycler_item.view.*
 import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 private const val TYPE_DATE = 0
@@ -89,11 +83,12 @@ class ForecastRecyclerAdapter @Inject constructor() : RecyclerView.Adapter<Forca
                     image.setImageURI(fetchImage(icon))
                     tvMain.text = main
                     tvDescription.text = desc
-                    tvTime.text =time
+                    tvTime.text =getTime(time)
                     tvWindSpeed.text = windSpeed
                     tvMin.text = context.getString(R.string.min_max_temperature ,minTemp)
                     tvMax.text = context.getString(R.string.min_max_temperature, maxTemp)
                     tvTemperature.text = actualTemp
+
 
             }
         }
@@ -105,6 +100,13 @@ class ForecastRecyclerAdapter @Inject constructor() : RecyclerView.Adapter<Forca
         private fun convertKelvinToCelsius(kevinValue :Double): String {
             return (kevinValue - 273.15).toBigDecimal().setScale(1, RoundingMode.UP).toDouble().toString()+ "°C"
         }
+
+        private fun getTime(time :String): String {
+            val sdf = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
+            val dateObj: Date = sdf.parse(time)
+            return SimpleDateFormat("hh:mm aa", Locale.ENGLISH).format(dateObj)
+        }
+
     }
 
 
