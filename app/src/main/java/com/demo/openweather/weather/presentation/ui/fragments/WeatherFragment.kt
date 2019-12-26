@@ -43,15 +43,20 @@ class WeatherFragment : DaggerFragment() {
 
     }
 
-    override fun onStart() {
-    super.onStart()
-    lifecycleScope.launchWhenStarted {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        lifecycleScope.launchWhenStarted {
             try {
                 mWeatherViewModel =
                     ViewModelProviders.of(activity!!, viewModelFactory)
                         .get(WeatherViewModel::class.java)
 
                 setToolbarViews()
+
+                if (lstOfWeatherResponse?.size!! > 0){
+                    val size= lstOfWeatherResponse?.size?.minus(1)
+                    size?.let { lstOfWeatherResponse?.removeAt(it) }
+                }
                 mWeatherViewModel.weatherResult.observe(viewLifecycleOwner, Observer {
                     when (it.status) {
                         Status.LOADING -> showLoading()

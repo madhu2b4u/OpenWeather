@@ -137,8 +137,6 @@ b
 ,app/src/main/res/layout/fragment_weather.xml,0/e/0ec8c21f32c3fdb147528217ac1e7c838cb5431a
 h
 8app/src/main/res/navigation/weather_navigation_graph.xml,f/d/fd0e376593cffd0729068e968c1fc50ac14980b9
-–
-fapp/src/main/java/com/demo/openweather/forecast/presentation/ui/adapter/ForecastRecyclerviewAdapter.kt,c/c/cc14c9a4c3dc137c6fb4e9c317b1920c46237438
 j
 :app/src/test/java/com/demo/openweather/LiveDataTestUtil.kt,8/b/8b985511033d3b8821e7e0a2adea5e72ed40b273
 k
@@ -155,3 +153,5 @@ w
 Gapp/src/test/java/com/demo/openweather/weather/WeatherRepositoryTest.kt,1/2/12de9e40324cf8ad4c098d0d6be09c50694b921d
 }
 Mapp/src/test/java/com/demo/openweather/weather/WeatherRemoteDataSourceTest.kt,3/0/30142866156c713c14d94e5dfbee10e7ed1c986e
+’
+bapp/src/main/java/com/demo/openweather/forecast/presentation/ui/adapter/ForecastRecyclerAdapter.kt,0/f/0fb79b769b27b129863edc9303a32bda8f3da8aa
