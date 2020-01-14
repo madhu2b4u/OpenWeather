@@ -53,7 +53,8 @@ class WeatherFragment : DaggerFragment() {
 
                 setToolbarViews()
 
-                if (lstOfWeatherResponse?.size!! > 0){
+
+                if (lstOfWeatherResponse?.isNotEmpty()!!){
                     val size= lstOfWeatherResponse?.size?.minus(1)
                     size?.let { lstOfWeatherResponse?.removeAt(it) }
                 }
