@@ -107,7 +107,7 @@ class ForecastFragment : DaggerFragment() {
     }
 
     private fun setGps(){
-        gps?.getLastLocation()
+        gps?.requestLocationPermission()
         gps?.locationListener { latitude, longitude ->
             mForecastViewModel.fetchForecast(latitude,longitude)
         }

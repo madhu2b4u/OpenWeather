@@ -51,6 +51,7 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
     androidTestImplementation 'androidx.test:rules:1.1.1'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.karumi:dexter:4.2.0'
 
 
 

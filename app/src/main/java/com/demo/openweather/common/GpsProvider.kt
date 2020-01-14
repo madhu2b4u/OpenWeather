@@ -3,18 +3,25 @@ package com.demo.openweather.common
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri.fromParts
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
-val PERMISSION_ID = 42
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
+
 
 class GpsProvider(private val activity :Activity, private var mFusedLocationClient : FusedLocationProviderClient) {
 
@@ -27,21 +34,6 @@ class GpsProvider(private val activity :Activity, private var mFusedLocationClie
         this.function = function
     }
 
-    private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            return true
-        }
-        return false
-    }
-
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(activity,
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSION_ID
-        )
-    }
-
     private fun isLocationEnabled(): Boolean {
         val locationManager: LocationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
@@ -50,27 +42,23 @@ class GpsProvider(private val activity :Activity, private var mFusedLocationClie
     }
     @SuppressLint("MissingPermission")
     fun getLastLocation() {
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
+        if (isLocationEnabled()) {
 
-                mFusedLocationClient.lastLocation.addOnCompleteListener(activity) { task ->
-                    val location: Location? = task.result
-                    if (location == null) {
-                        requestNewLocationData()
-                    } else {
-                        latitude = location.latitude.toString()
-                        longitude = location.longitude.toString()
-                        Log.e("lat n long", "$latitude,$longitude")
-                        function?.invoke(latitude,longitude)
-                    }
+            mFusedLocationClient.lastLocation.addOnCompleteListener(activity) { task ->
+                val location: Location? = task.result
+                if (location == null) {
+                    requestNewLocationData()
+                } else {
+                    latitude = location.latitude.toString()
+                    longitude = location.longitude.toString()
+                    Log.e("lat n long", "$latitude,$longitude")
+                    function?.invoke(latitude,longitude)
                 }
-            } else {
-                Toast.makeText(activity, "Turn on location", Toast.LENGTH_LONG).show()
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                activity.startActivity(intent)
             }
         } else {
-            requestPermissions()
+            Toast.makeText(activity, "Turn on location", Toast.LENGTH_LONG).show()
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            activity.startActivity(intent)
         }
     }
 
@@ -89,12 +77,69 @@ class GpsProvider(private val activity :Activity, private var mFusedLocationClie
         )
     }
 
-    val mLocationCallback = object : LocationCallback() {
+    private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             val mLastLocation: Location = locationResult.lastLocation
             latitude = mLastLocation.latitude.toString()
             longitude = mLastLocation.longitude.toString()
         }
+    }
+
+
+    /**
+     * Requesting location permission
+     * This uses single permission model from dexter
+     * Once the permission granted, fetches the coordinates
+     * On permanent denial opens settings dialog
+     */
+    fun requestLocationPermission() {
+        Dexter.withActivity(activity)
+            .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+            .withListener(object : PermissionListener {
+                override fun onPermissionGranted(response: PermissionGrantedResponse) {
+                    getLastLocation()
+                }
+
+                override fun onPermissionDenied(response: PermissionDeniedResponse) {
+                    // check for permanent denial of permission
+                    if (response.isPermanentlyDenied) {
+                        showSettingsDialog()
+                    }
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    permission: PermissionRequest,
+                    token: PermissionToken) {
+                    token.continuePermissionRequest()
+                }
+            }).check()
+    }
+
+    /**
+     * Showing Alert Dialog with Settings option
+     * Navigates user to app settings
+     * NOTE: Keep proper title and message depending on your app
+     */
+    private fun showSettingsDialog() {
+        val builder = AlertDialog.Builder(activity)
+        builder.setTitle("Need Permissions")
+        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.")
+        builder.setPositiveButton("GOTO SETTINGS") { dialog, which ->
+            dialog.cancel()
+            openSettings()
+        }
+        builder.setNegativeButton("Cancel",
+            DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+        builder.show()
+
+    }
+
+    // navigating user to app settings
+    private fun openSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = fromParts("package", activity.packageName, null)
+        intent.data = uri
+        activity.startActivityForResult(intent,101)
     }
 
 
