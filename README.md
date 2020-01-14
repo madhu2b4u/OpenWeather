@@ -6,7 +6,6 @@ Simple RecyclerView demo app for Android Proficiency Exercise using MVVMi archit
 - ViewModel
 - Mvvmi Architecture
 - Courtines
-- Live Data
 - LiveData Architecture
 
 ### Prerequisites
