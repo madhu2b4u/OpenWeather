@@ -7,4 +7,8 @@
     <string name="no_cities_added">No cities added</string>
     <string name="no_data_available">No data available</string>
     <string name="toolbar_forecast_title">Forecast</string>
+    <string name="cancel">"Cancel"</string>
+    <string name="permissons">"Need Permissions"</string>
+    <string name="settings">"GOTO SETTINGS"</string>
+    <string name="app_permissons">"This app needs permission to use this feature. You can grant them in app settings."</string>
 </resources>

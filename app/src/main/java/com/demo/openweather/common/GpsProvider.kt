@@ -121,14 +121,18 @@ class GpsProvider(private val activity :Activity, private var mFusedLocationClie
      * NOTE: Keep proper title and message depending on your app
      */
     private fun showSettingsDialog() {
+        val permissons = activity.getString(com.demo.openweather.R.string.permissons)
+        val appSettings = activity.getString(com.demo.openweather.R.string.app_permissons)
+        val settings = activity.getString(com.demo.openweather.R.string.settings)
+        val cancel = activity.getString(com.demo.openweather.R.string.cancel)
         val builder = AlertDialog.Builder(activity)
-        builder.setTitle("Need Permissions")
-        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.")
-        builder.setPositiveButton("GOTO SETTINGS") { dialog, which ->
+        builder.setTitle(permissons)
+        builder.setMessage(appSettings)
+        builder.setPositiveButton(settings) { dialog, which ->
             dialog.cancel()
             openSettings()
         }
-        builder.setNegativeButton("Cancel",
+        builder.setNegativeButton(cancel,
             DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
         builder.show()
 

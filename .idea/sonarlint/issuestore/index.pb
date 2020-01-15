@@ -155,3 +155,5 @@ Gapp/src/test/java/com/demo/openweather/weather/WeatherRepositoryTest.kt,1/2/12
 Mapp/src/test/java/com/demo/openweather/weather/WeatherRemoteDataSourceTest.kt,3/0/30142866156c713c14d94e5dfbee10e7ed1c986e
 ’
 bapp/src/main/java/com/demo/openweather/forecast/presentation/ui/adapter/ForecastRecyclerAdapter.kt,0/f/0fb79b769b27b129863edc9303a32bda8f3da8aa
+@
+local.properties,0/7/0712df971a99ac4d2fccb8e0fb19f377f3374cca
